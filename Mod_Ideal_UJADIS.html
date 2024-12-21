@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendário UJADIS 2025</title>
+    <style>
+        /* Estilo básico */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        header {
+            background-color: #3f51b5;
+            color: #fff;
+            text-align: center;
+            padding: 20px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.8em;
+        }
+
+        .container {
+            padding: 20px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .month {
+            background-color: #ffffff;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .month-header {
+            background-color: #3f51b5;
+            color: white;
+            padding: 10px 15px;
+            font-size: 1.2em;
+        }
+
+        .month-body {
+            padding: 15px;
+            line-height: 1.6;
+        }
+
+        .event {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #e8f0fe;
+            border-left: 5px solid #3f51b5;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .event:hover {
+            background-color: #d3e2fd;
+        }
+
+        .event-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .event-date {
+            font-size: 0.9em;
+            color: #555;
+        }
+
+        footer {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 0.8em;
+            color: #777;
+        }
+
+        /* Estilo do modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 0;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 600px;
+            position: relative;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            height: 80%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-header {
+            background-color: #3f51b5;
+            color: white;
+            padding: 10px;
+            font-size: 1.2em;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-close {
+            font-size: 1.5em;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .modal-close:hover {
+            color: #ff0000;
+        }
+
+        .modal-iframe {
+            flex: 1;
+            border: none;
+            width: 100%;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.5em;
+                padding: 15px 0;
+            }
+
+            .month-header {
+                font-size: 1em;
+                padding: 10px;
+            }
+
+            .modal-content {
+                width: 95%;
+                height: 85%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header h1 {
+                font-size: 1.2em;
+            }
+
+            .month-header {
+                font-size: 0.9em;
+            }
+
+            .modal-content {
+                height: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Calendário UJADIS 2025</h1>
+    </header>
+    <div class="container" id="calendar-container">
+        <!-- O conteúdo será adicionado dinamicamente pelo JavaScript -->
+    </div>
+    <footer>
+        &copy; 2025 Ministério Jovem
+    </footer>
+
+    <!-- Modal -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span id="modal-title"></span>
+                <span class="modal-close" id="modal-close">&times;</span>
+            </div>
+            <iframe class="modal-iframe" id="modal-iframe" src=""></iframe>
+        </div>
+    </div>
+
+    
+    <script>
+        // Dados do calendário
+        const calendarData = {
+            "Janeiro": [
+                { title: "Encontro de Líderes", date: "18 de Janeiro", link: "#" },
+                { title: "Concentração Regional UJADIS", date: "Sábado dia 25", link: "https://calendar.app.google/9RuRzwc9LyCLM1fXA" }
+            ],
+            "Fevereiro": [
+                { title: "Consagração", date: "1º Sábado", link: "#" },
+                { title: '"Aquece Graça" – Preparação para o evento "Graça Brasil"', date: "Último Sábado", link: "#" }
+            ],
+            "Março": [
+                { title: 'Evento "Graça Brasil"', date: "1 a 3 de Março", link: "#" },
+                { title: "Consagração", date: "1º Sábado", link: "#" },
+                { title: "Culto de Jovens (Concentração de Jovens)", date: "Último Sábado", link: "#" }
+            ],
+            "Abril": [
+                { title: "Consagração", date: "1º Sábado", link: "#" },
+                { title: "Evento: Lava Jato Beneficente", date: "Data a definir", link: "#" }
+            ],
+            "Maio": [
+                { title: "Consagração", date: "1º Sábado", link: "#" },
+                { title: "Culto de Jovens (Concentração de Jovens)", date: "Último Sábado", link: "#" }
+            ],
+            "Junho": [
+                { title: "Consagração", date: "1º Sábado", link: "#" },
+                { title: "Evento: Tropeiro Beneficente (pode ser em formato de Arraiá)", date: "Data a definir", link: "#" }
+            ],
+            "Julho": [
+                { title: "Consagração", date: "1º Sábado", link: "#" },
+                { title: "Culto de Jovens (Concentração de Jovens)", date: "Último Sábado", link: "#" },
+                { title: "Evento: Cine Pipoca", date: "Data a definir", link: "#" }
+            ],
+            "Agosto": [
+                { title: "Consagração", date: "1º Sábado", link: "#" },
+                { title: "Evento: Workshop de Capacitação", date: "Data a definir", link: "#" }
+            ],
+            "Setembro": [
+                { title: "Consagração", date: "1º Sábado", link: "#" },
+                { title: "Culto de Jovens (Concentração de Jovens)", date: "Último Sábado", link: "#" },
+                { title: "Evento: Festival de Churrasco", date: "Data a definir", link: "#" }
+            ],
+            "Outubro": [
+                { title: "Consagração", date: "1º Sábado", link: "#" }
+            ],
+            "Novembro": [
+                { title: "Consagração", date: "1º Sábado", link: "#" },
+                { title: "Festa Regional de Jovens", date: "Último Sábado", link: "#" }
+            ],
+            "Dezembro": [
+                { title: "Consagração", date: "1º Sábado", link: "#" }
+            ]
+        };
+        const calendarContainer = document.getElementById("calendar-container");
+        const modal = document.getElementById("modal");
+        const modalClose = document.getElementById("modal-close");
+        const modalTitle = document.getElementById("modal-title");
+        const modalIframe = document.getElementById("modal-iframe");
+
+        Object.keys(calendarData).forEach(month => {
+            const monthDiv = document.createElement("div");
+            monthDiv.className = "month";
+
+            const monthHeader = document.createElement("div");
+            monthHeader.className = "month-header";
+            monthHeader.textContent = month;
+
+            const monthBody = document.createElement("div");
+            monthBody.className = "month-body";
+
+            calendarData[month].forEach(event => {
+                const eventLink = document.createElement("a");
+                eventLink.href = "#";
+                eventLink.className = "event";
+                eventLink.addEventListener("click", function (e) {
+                    e.preventDefault();
+                    modal.style.display = "flex";
+                    modalTitle.textContent = `${event.title} - ${event.date}`;
+                    modalIframe.src = event.link;
+                });
+
+                const eventTitle = document.createElement("div");
+                eventTitle.className = "event-title";
+                eventTitle.textContent = event.title;
+
+                const eventDate = document.createElement("div");
+                eventDate.className = "event-date";
+                eventDate.textContent = event.date;
+
+                eventLink.appendChild(eventTitle);
+                eventLink.appendChild(eventDate);
+                monthBody.appendChild(eventLink);
+            });
+
+            monthDiv.appendChild(monthHeader);
+            monthDiv.appendChild(monthBody);
+            calendarContainer.appendChild(monthDiv);
+        });
+
+        // Fecha o modal ao clicar no "X"
+        modalClose.addEventListener("click", () => {
+            modal.style.display = "none";
+            modalIframe.src = ""; // Limpa o iframe ao fechar o modal
+        });
+
+        // Fecha o modal ao clicar fora do conteúdo
+        window.addEventListener("click", (e) => {
+            if (e.target === modal) {
+                modal.style.display = "none";
+                modalIframe.src = ""; // Limpa o iframe ao fechar o modal
+            }
+        });
+    </script>
+</body>
+</html>

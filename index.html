@@ -104,30 +104,21 @@
 
         .modal-content {
             background-color: #fff;
-            padding: 0;
+            padding: 20px;
             border-radius: 8px;
             width: 90%;
             max-width: 600px;
             position: relative;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-            height: 80%;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .modal-header {
-            background-color: #3f51b5;
-            color: white;
-            padding: 10px;
-            font-size: 1.2em;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            text-align: center;
         }
 
         .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
             font-size: 1.5em;
-            color: white;
+            color: #333;
             cursor: pointer;
             font-weight: bold;
         }
@@ -136,42 +127,27 @@
             color: #ff0000;
         }
 
-        .modal-iframe {
-            flex: 1;
+        .modal-image {
+            max-width: 100%;
+            margin-bottom: 15px;
+            border-radius: 8px;
+        }
+
+        .modal-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #3f51b5;
+            color: white;
             border: none;
-            width: 100%;
+            border-radius: 4px;
+            text-decoration: none;
+            cursor: pointer;
+            font-size: 1em;
+            margin-top: 15px;
         }
 
-        /* Responsividade */
-        @media (max-width: 768px) {
-            header h1 {
-                font-size: 1.5em;
-                padding: 15px 0;
-            }
-
-            .month-header {
-                font-size: 1em;
-                padding: 10px;
-            }
-
-            .modal-content {
-                width: 95%;
-                height: 85%;
-            }
-        }
-
-        @media (max-width: 480px) {
-            header h1 {
-                font-size: 1.2em;
-            }
-
-            .month-header {
-                font-size: 0.9em;
-            }
-
-            .modal-content {
-                height: 90%;
-            }
+        .modal-button:hover {
+            background-color: #2c3e99;
         }
     </style>
 </head>
@@ -179,9 +155,7 @@
     <header>
         <h1>Calendário UJADIS 2025</h1>
     </header>
-    <div class="container" id="calendar-container">
-        <!-- O conteúdo será adicionado dinamicamente pelo JavaScript -->
-    </div>
+    <div class="container" id="calendar-container"></div>
     <footer>
         &copy; 2025 Ministério Jovem
     </footer>
@@ -189,73 +163,205 @@
     <!-- Modal -->
     <div class="modal" id="modal">
         <div class="modal-content">
-            <div class="modal-header">
-                <span id="modal-title"></span>
-                <span class="modal-close" id="modal-close">&times;</span>
-            </div>
-            <iframe class="modal-iframe" id="modal-iframe" src=""></iframe>
+            <span class="modal-close" id="modal-close">&times;</span>
+            <img src="#" alt="Imagem do evento" class="modal-image" id="modal-image">
+            <p id="modal-text"></p>
+            <a id="modal-link" href="#" target="_blank" class="modal-button">Confirmar presença</a>
         </div>
     </div>
 
-    
+
     <script>
         // Dados do calendário
         const calendarData = {
-            "Janeiro": [
-                { title: "Encontro de Líderes", date: "18 de Janeiro", link: "#" },
-                { title: "Concentração Regional UJADIS", date: "Sábado dia 25", link: "https://calendar.app.google/9RuRzwc9LyCLM1fXA" }
-            ],
-            "Fevereiro": [
-                { title: "Consagração", date: "1º Sábado", link: "#" },
-                { title: '"Aquece Graça" – Preparação para o evento "Graça Brasil"', date: "Último Sábado", link: "#" }
-            ],
-            "Março": [
-                { title: 'Evento "Graça Brasil"', date: "1 a 3 de Março", link: "#" },
-                { title: "Consagração", date: "1º Sábado", link: "#" },
-                { title: "Culto de Jovens (Concentração de Jovens)", date: "Último Sábado", link: "#" }
-            ],
-            "Abril": [
-                { title: "Consagração", date: "1º Sábado", link: "#" },
-                { title: "Evento: Lava Jato Beneficente", date: "Data a definir", link: "#" }
-            ],
-            "Maio": [
-                { title: "Consagração", date: "1º Sábado", link: "#" },
-                { title: "Culto de Jovens (Concentração de Jovens)", date: "Último Sábado", link: "#" }
-            ],
-            "Junho": [
-                { title: "Consagração", date: "1º Sábado", link: "#" },
-                { title: "Evento: Tropeiro Beneficente (pode ser em formato de Arraiá)", date: "Data a definir", link: "#" }
-            ],
-            "Julho": [
-                { title: "Consagração", date: "1º Sábado", link: "#" },
-                { title: "Culto de Jovens (Concentração de Jovens)", date: "Último Sábado", link: "#" },
-                { title: "Evento: Cine Pipoca", date: "Data a definir", link: "#" }
-            ],
-            "Agosto": [
-                { title: "Consagração", date: "1º Sábado", link: "#" },
-                { title: "Evento: Workshop de Capacitação", date: "Data a definir", link: "#" }
-            ],
-            "Setembro": [
-                { title: "Consagração", date: "1º Sábado", link: "#" },
-                { title: "Culto de Jovens (Concentração de Jovens)", date: "Último Sábado", link: "#" },
-                { title: "Evento: Festival de Churrasco", date: "Data a definir", link: "#" }
-            ],
-            "Outubro": [
-                { title: "Consagração", date: "1º Sábado", link: "#" }
-            ],
-            "Novembro": [
-                { title: "Consagração", date: "1º Sábado", link: "#" },
-                { title: "Festa Regional de Jovens", date: "Último Sábado", link: "#" }
-            ],
-            "Dezembro": [
-                { title: "Consagração", date: "1º Sábado", link: "#" }
-            ]
-        };
-        const calendarContainer = document.getElementById("calendar-container");
+    "Janeiro": [
+        { 
+            title: "Encontro de Líderes", 
+            date: "18 de Janeiro", 
+            link: "#", 
+            image: "https://example.com/images/encontro-lideres.jpg" 
+        },
+        { 
+            title: "Concentração Regional UJADIS", 
+            date: "Sábado dia 25", 
+            link: "https://calendar.app.google/9RuRzwc9LyCLM1fXA", 
+            image: "https://example.com/images/concentracao-regional.jpg" 
+        }
+    ],
+    "Fevereiro": [
+        { 
+            title: "Consagração", 
+            date: "1º Sábado", 
+            link: "#", 
+            image: "https://example.com/images/consagracao.jpg" 
+        },
+        { 
+            title: '"Aquece Graça" – Preparação para o evento "Graça Brasil"', 
+            date: "Último Sábado", 
+            link: "#", 
+            image: "https://example.com/images/aquece-graca.jpg" 
+        }
+    ],
+    "Março": [
+        { 
+            title: 'Evento "Graça Brasil"', 
+            date: "1 a 3 de Março", 
+            link: "https://calendar.app.google/mTmLMdmYyTfjwo4H7", 
+            image: "https://scontent-gru2-2.cdninstagram.com/v/t51.29350-15/469575761_951275383574910_1117544869076929767_n.jpg?stp=dst-jpg_e35_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6ImltYWdlX3VybGdlbi4xMzUweDE2ODcuc2RyLmYyOTM1MC5kZWZhdWx0X2ltYWdlIn0&_nc_ht=scontent-gru2-2.cdninstagram.com&_nc_cat=106&_nc_ohc=rVD5be1aWNsQ7kNvgF6vFHV&_nc_gid=1b7ecd689b974d6b98ebe4cf655fe400&edm=AP4sbd4BAAAA&ccb=7-5&ig_cache_key=MzUxODEzNDMxNDY4ODk5MTY3Mg%3D%3D.3-ccb7-5&oh=00_AYA7v0wvPb8jo7rkENMPl442F1csBdHk9mMzfhtmykp2lQ&oe=676C73DB&_nc_sid=7a9f4b.jpg" 
+        },
+        { 
+            title: "Consagração", 
+            date: "1º Sábado", 
+            link: "#", 
+            image: "https://example.com/images/consagracao.jpg" 
+        },
+        { 
+            title: "Culto de Jovens (Concentração de Jovens)", 
+            date: "Último Sábado", 
+            link: "#", 
+            image: "https://example.com/images/culto-jovens.jpg" 
+        }
+    ],
+    "Abril": [
+        { 
+            title: "Consagração", 
+            date: "1º Sábado", 
+            link: "#", 
+            image: "https://example.com/images/consagracao.jpg" 
+        },
+        { 
+            title: "Evento: Lava Jato Beneficente", 
+            date: "Data a definir", 
+            link: "#", 
+            image: "https://example.com/images/lava-jato.jpg" 
+        }
+    ],
+    "Maio": [
+        { 
+            title: "Consagração", 
+            date: "1º Sábado", 
+            link: "#", 
+            image: "https://example.com/images/consagracao.jpg" 
+        },
+        { 
+            title: "Culto de Jovens (Concentração de Jovens)", 
+            date: "Último Sábado", 
+            link: "#", 
+            image: "https://example.com/images/culto-jovens.jpg" 
+        }
+    ],
+    "Junho": [
+        { 
+            title: "Consagração", 
+            date: "1º Sábado", 
+            link: "#", 
+            image: "https://example.com/images/consagracao.jpg" 
+        },
+        { 
+            title: "Evento: Tropeiro Beneficente (pode ser em formato de Arraiá)", 
+            date: "Data a definir", 
+            link: "#", 
+            image: "https://example.com/images/tropeiro.jpg" 
+        }
+    ],
+    "Julho": [
+        { 
+            title: "Consagração", 
+            date: "1º Sábado", 
+            link: "#", 
+            image: "https://example.com/images/consagracao.jpg" 
+        },
+        { 
+            title: "Culto de Jovens (Concentração de Jovens)", 
+            date: "Último Sábado", 
+            link: "#", 
+            image: "https://example.com/images/culto-jovens.jpg" 
+        },
+        { 
+            title: "Evento: Cine Pipoca", 
+            date: "Data a definir", 
+            link: "#", 
+            image: "https://example.com/images/cine-pipoca.jpg" 
+        }
+    ],
+    "Agosto": [
+        { 
+            title: "Consagração", 
+            date: "1º Sábado", 
+            link: "#", 
+            image: "https://example.com/images/consagracao.jpg" 
+        },
+        { 
+            title: "Evento: Workshop de Capacitação", 
+            date: "Data a definir", 
+            link: "#", 
+            image: "https://example.com/images/workshop-capacitacao.jpg" 
+        }
+    ],
+    "Setembro": [
+        { 
+            title: "Consagração", 
+            date: "1º Sábado", 
+            link: "#", 
+            image: "https://example.com/images/consagracao.jpg" 
+        },
+        { 
+            title: "Culto de Jovens (Concentração de Jovens)", 
+            date: "Último Sábado", 
+            link: "#", 
+            image: "https://example.com/images/culto-jovens.jpg" 
+        },
+        { 
+            title: "Evento: Festival de Churrasco", 
+            date: "Data a definir", 
+            link: "#", 
+            image: "https://example.com/images/festival-churrasco.jpg" 
+        }
+    ],
+    "Outubro": [
+        { 
+            title: "Consagração", 
+            date: "1º Sábado", 
+            link: "#", 
+            image: "https://example.com/images/consagracao.jpg" 
+        }
+    ],
+    "Novembro": [
+        { 
+            title: "Consagração", 
+            date: "1º Sábado", 
+            link: "#", 
+            image: "https://example.com/images/consagracao.jpg" 
+        },
+        { 
+            title: "Festa Regional de Jovens", 
+            date: "Último Sábado", 
+            link: "#", 
+            image: "https://example.com/images/festa-regional.jpg" 
+        }
+    ],
+    "Dezembro": [
+        { 
+            title: "Consagração", 
+            date: "1º Sábado", 
+            link: "#", 
+            image: "https://example.com/images/consagracao.jpg" 
+        },
+        { 
+            title: "Culto de Encerramento do Ano", 
+            date: "Última Semana de Dezembro", 
+            link: "#", 
+            image: "https://example.com/images/encerramento-ano.jpg" 
+        }
+    ]
+};
+
+const calendarContainer = document.getElementById("calendar-container");
         const modal = document.getElementById("modal");
         const modalClose = document.getElementById("modal-close");
-        const modalTitle = document.getElementById("modal-title");
-        const modalIframe = document.getElementById("modal-iframe");
+        const modalText = document.getElementById("modal-text");
+        const modalLink = document.getElementById("modal-link");
+        const modalImage = document.getElementById("modal-image");
 
         Object.keys(calendarData).forEach(month => {
             const monthDiv = document.createElement("div");
@@ -270,13 +376,14 @@
 
             calendarData[month].forEach(event => {
                 const eventLink = document.createElement("a");
-                eventLink.href = "#";
+                eventLink.href = event.link;
                 eventLink.className = "event";
                 eventLink.addEventListener("click", function (e) {
                     e.preventDefault();
                     modal.style.display = "flex";
-                    modalTitle.textContent = `${event.title} - ${event.date}`;
-                    modalIframe.src = event.link;
+                    modalText.textContent = `${event.title} - ${event.date}`;
+                    modalLink.href = event.link;
+                    modalImage.src = event.image || "#";
                 });
 
                 const eventTitle = document.createElement("div");
@@ -297,17 +404,13 @@
             calendarContainer.appendChild(monthDiv);
         });
 
-        // Fecha o modal ao clicar no "X"
         modalClose.addEventListener("click", () => {
             modal.style.display = "none";
-            modalIframe.src = ""; // Limpa o iframe ao fechar o modal
         });
 
-        // Fecha o modal ao clicar fora do conteúdo
         window.addEventListener("click", (e) => {
             if (e.target === modal) {
                 modal.style.display = "none";
-                modalIframe.src = ""; // Limpa o iframe ao fechar o modal
             }
         });
     </script>
