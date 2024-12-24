@@ -52,7 +52,7 @@
         .month-body {
             padding: 15px;
             line-height: 1.6;
-            display: none;
+            display: block;
         }
 
         .event {
@@ -151,6 +151,29 @@
         .modal-button:hover {
             background-color: #2c3e99;
         }
+         /* Adicionando animação de escala ao popup */
+         @keyframes scaleUp {
+             0% {
+                 transform: scale(0.5);
+                 opacity: 0;
+             }
+            30% {
+                transform: scale(1.1);
+                opacity: 1;
+             }
+            60% {
+                transform: scale(0.95);
+                opacity: 1;
+             }
+              100% {
+             transform: scale(1);
+              opacity: 1;
+              }
+}
+
+        .modal-content {
+            animation: scaleUp 0.3s ease-out;
+        }
     </style>
 </head>
 <body>
@@ -208,7 +231,7 @@
             title: 'Graça Brasil 2025', 
             date: "1 a 3 de Março", 
             link: "https://calendar.app.google/mTmLMdmYyTfjwo4H7", 
-            image: "https://photos.google.com/share/AF1QipMCZUHBTC92Yex9ksTd0n26rqGnsyXXqB6ozxIrLMRvhd7Ndri4HcGTNMa1shQ2ZA/photo/AF1QipPEgLXYPKhdeyjyHEJXAcJYash1smGrm4dBZKjc?key=WmtZM3E4VEdaWkExbG5RMXNfSl9ONUVyYU40UDlB" 
+            image: "https://ibb.co/Ksjy8JN" 
         },
         { 
             title: "Consagração", 
@@ -357,18 +380,15 @@
     ]
 };
 
-    // Seleção de elementos DOM
-    const calendarContainer = document.getElementById("calendar-container");
-    const modal = document.getElementById("modal");
-    const modalClose = document.getElementById("modal-close");
-    const modalText = document.getElementById("modal-text");
-    const modalLink = document.getElementById("modal-link");
-    const modalImage = document.getElementById("modal-image");
+const calendarContainer = document.getElementById("calendar-container");
+        const modal = document.getElementById("modal");
+        const modalClose = document.getElementById("modal-close");
+        const modalText = document.getElementById("modal-text");
+        const modalLink = document.getElementById("modal-link");
+        const modalImage = document.getElementById("modal-image");
 
-    // Garantir que elementos DOM foram encontrados
-    if (calendarContainer && modal && modalClose && modalText && modalLink && modalImage) {
+        // Gera o calendário
         Object.keys(calendarData).forEach(month => {
-            // Criar estrutura do mês
             const monthDiv = document.createElement("div");
             monthDiv.className = "month";
 
@@ -376,32 +396,25 @@
             monthHeader.className = "month-header";
             monthHeader.textContent = month;
 
-            // Alternar visibilidade da month-body
+            // Alternar exibição do corpo do mês
             monthHeader.addEventListener("click", () => {
                 const body = monthDiv.querySelector(".month-body");
-                if (body) {
-                    body.style.display = body.style.display === "none" ? "block" : "none";
-                }
+                body.style.display = body.style.display === "block" ? "none" : "block";
             });
 
             const monthBody = document.createElement("div");
             monthBody.className = "month-body";
-            monthBody.style.display = "none"; // Oculto por padrão
 
-            // Adicionar eventos
             calendarData[month].forEach(event => {
                 const eventLink = document.createElement("a");
-                eventLink.href = event.link || "#";
+                eventLink.href = event.link;
                 eventLink.className = "event";
-
-                // Clique no evento para abrir o modal
                 eventLink.addEventListener("click", function (e) {
                     e.preventDefault();
                     modal.style.display = "flex";
-                    alert(`Switch alert para ${event.title}`);
                     modalText.textContent = `${event.title} - ${event.date}`;
-                    modalLink.href = event.link || "#";
-                    modalImage.src = event.image || "https://via.placeholder.com/300"; // Fallback para imagem
+                    modalLink.href = event.link;
+                    modalImage.src = event.image || "https://via.placeholder.com/300";
                 });
 
                 const eventTitle = document.createElement("div");
@@ -417,24 +430,22 @@
                 monthBody.appendChild(eventLink);
             });
 
-            // Montar a estrutura do mês
             monthDiv.appendChild(monthHeader);
             monthDiv.appendChild(monthBody);
             calendarContainer.appendChild(monthDiv);
         });
 
-        // Fechar o modal ao clicar no botão de fechar
+        // Fecha o modal
         modalClose.addEventListener("click", () => {
             modal.style.display = "none";
         });
 
-        // Fechar o modal ao clicar fora dele
+        // Fecha o modal ao clicar fora
         window.addEventListener("click", (e) => {
             if (e.target === modal) {
                 modal.style.display = "none";
             }
         });
-    } else {
-        console.error("Erro ao inicializar o calendário: elementos DOM não encontrados.");
-    }
-</script>
+    </script>
+</body>
+</html>
